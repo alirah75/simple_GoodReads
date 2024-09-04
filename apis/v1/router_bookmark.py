@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 
+from database.repository.comment import get_comment_by_user_and_book
+from database.repository.rating import get_rating_by_user_and_book
 from database.session import get_db
-from database.models.bookmark import Bookmark
 from database.repository.bookmark import add_bookmark, delete_bookmark
 from database.models.book import Book
 from database.models.user import User

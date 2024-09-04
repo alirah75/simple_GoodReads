@@ -1,5 +1,5 @@
 # router_rating.py
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from schemas.rating import RatingCreate
 

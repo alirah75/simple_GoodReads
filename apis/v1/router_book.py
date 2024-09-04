@@ -7,12 +7,15 @@ from fastapi import Depends
 from fastapi import HTTPException, status
 
 from core.security import get_user_id_from_token, get_current_user
-from database.repository.comment import add_comment
-from database.repository.rating import add_rating
+from database.repository.bookmark import get_bookmark_by_user_and_book
+from database.repository.comment import add_comment, upsert_comment
+from database.repository.rating import add_rating, upsert_rating
 from database.session import get_db
 from database.repository.book import retrieve_book, list_books
 from schemas.book import BookDetail, BookList
+from schemas.comment import CommentCreate
 from schemas.rate_and_comment import RateAndCommentRequest
+from schemas.rating import RatingCreate
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -51,24 +54,20 @@ def get_all_books(db: Session = Depends(get_db), token: Optional[str] = Depends(
     return results
 
 
-@router.post("/books/{id}/rate_comment")
-def rate_and_comment_book(id: int, request: RateAndCommentRequest, authorization: Optional[str] = Header(None),
-                          db: Session = Depends(get_db)):
-    if not authorization:
+@router.post("/books/{book_id}/rate_and_comment", status_code=status.HTTP_200_OK)
+def rate_and_comment_book(book_id: int, rating: RatingCreate = None, comment: CommentCreate = None,
+                          db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+    book = retrieve_book(id=book_id, db=db)
+    if not book:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header missing",
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Book with ID {book_id} not found"
         )
 
-    token = authorization.split(" ")[1]
-    user_id = get_user_id_from_token(token)
+    if rating:
+        upsert_rating(user_id=current_user, book_id=book_id, rating=rating, db=db)
 
-    if request.rate is not None:
-        if request.rate < 1 or request.rate > 5:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Rating must be between 1 and 5")
-        add_rating(user_id=user_id, book_id=id, rate=request.rate, db=db)
+    if comment:
+        upsert_comment(user_id=current_user, book_id=book_id, comment=comment, db=db)
 
-    if request.comment:
-        add_comment(user_id=user_id, book_id=id, comment_text=request.comment, db=db)
-
-    return {"msg": "Rating and/or comment submitted successfully"}
+    return {"message": "Rating and/or comment updated successfully"}

@@ -20,3 +20,11 @@ def delete_bookmark(user_id: int, book_id: int, db: Session):
 
 def is_bookmarked(user_id: int, book_id: int, db: Session):
     return db.query(Bookmark).filter(Bookmark.user_id == user_id, Bookmark.book_id == book_id).first() is not None
+
+
+def get_bookmark_by_user_and_book(user_id: int, book_id: int, db: Session):
+    bookmark = db.query(Bookmark).filter(
+        Bookmark.user_id == user_id,
+        Bookmark.book_id == book_id
+    ).first()
+    return bookmark
