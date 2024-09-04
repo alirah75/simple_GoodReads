@@ -1,0 +1,38 @@
+├─ .env
+├─ alembic/
+├─ apis/
+│  ├─ base.py                   
+│  └─ v1/                       
+│     ├─ router_user.py
+│     ├─ router_book.py
+│     ├─ router_bookmark.py
+│     ├─ router_comment.py
+│     ├─ router_rating.py
+├─ core/
+│  ├─ config.py
+│  ├─ hashing.py
+│  ├─ security.py
+├─ database/
+│  ├─ base.py     
+│  ├─ base_class.py
+│  ├─ session.py
+│  ├─ models/
+│  │  ├─ book.py
+│  │  ├─ bookmark.py
+│  │  ├─ comment.py
+│  │  ├─ rating.py
+│  │  ├─ user.py
+│  ├─ repository/
+│     ├─ book.py
+│     ├─ bookmark.py
+│     ├─ rating.py
+│     ├─ user.py
+├─ schemas/
+│  ├─ book.py
+│  ├─ comment.py
+│  ├─ rate_and_comment.py
+│  ├─ rating.py
+│  ├─ token.py
+│  ├─ user.py
+├─ main.py
+├─ requirements.txt
