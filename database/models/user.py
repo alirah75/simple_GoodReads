@@ -6,8 +6,8 @@ from database.base_class import Base
 class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String(50), unique=True, index=True)
-    hashed_password = Column(String(50))
+    email = Column(String(70), unique=True, index=True)
+    hashed_password = Column(String(128))
     is_admin = Column(Boolean, default=False)
 
     bookmarks = relationship("Bookmark", back_populates="user")
