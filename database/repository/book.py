@@ -45,27 +45,10 @@ def list_books(db: Session, user_id: Optional[int] = None):
                 is_bookmarked = db.query(Bookmark).filter(Bookmark.book_id == book.id,
                                                           Bookmark.user_id == user_id).first() is not None
 
-            book_list.append(BookList(id=book.id, name=book.title, bookmark_count=bookmark_count,
+            book_list.append(BookList(id=book.id,
+                                      title=book.title,
+                                      description=book.description,
+                                      bookmark_count=bookmark_count,
                                       is_bookmarked=is_bookmarked))
 
         return book_list
-
-
-# def update_book(id: int, book: UpdateBook, db: Session):
-#     book_in_db = db.query(Book).filter(Book.id == id).first()
-#     if not book_in_db:
-#         return
-#     book_in_db.name = book.name
-#     book_in_db.description = book.description
-#     db.add(book_in_db)
-#     db.commit()
-#     return book_in_db
-
-
-# def delete_book(id: int, db: Session):
-#     book_in_db = db.query(Book).filter(Book.id == id)
-#     if not book_in_db.first():
-#         return {"error": f"Could not find book with id {id}"}
-#     book_in_db.delete()
-#     db.commit()
-#     return {"msg": f"deleted book with id {id}"}

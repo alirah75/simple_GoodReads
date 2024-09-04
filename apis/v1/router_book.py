@@ -30,16 +30,16 @@ def get_book(id: int, db: Session = Depends(get_db)):
 
 @router.get("/books", response_model=List[BookList])
 def get_all_books(db: Session = Depends(get_db), token: Optional[str] = Depends(oauth2_scheme)):
-    books = list_books(db=db)
+    user_id = get_current_user(token, db).id
+    books = list_books(db=db, user_id=user_id)
     results = []
 
     for book in books:
         book_data = {
             "id": book.id,
-            "name": book.title,
+            "title": book.title,
             "description": book.description,
-            "created_at": book.created_at,
-            "bookmarked_by": len(book.bookmarks),
+            "bookmark_count": book.bookmark_count,
             "is_bookmarked": False
         }
 
@@ -64,9 +64,9 @@ def rate_and_comment_book(book_id: int, rating: RatingCreate = None, comment: Co
         )
 
     if rating:
-        upsert_rating(user_id=current_user, book_id=book_id, rating=rating, db=db)
+        upsert_rating(user_id=current_user.id, book_id=book_id, rate=rating.rate, db=db)
 
     if comment:
-        upsert_comment(user_id=current_user, book_id=book_id, comment=comment, db=db)
+        upsert_comment(user_id=current_user.id, book_id=book_id, comment_text=comment.comment_text, db=db)
 
     return {"message": "Rating and/or comment updated successfully"}

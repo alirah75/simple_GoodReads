@@ -28,3 +28,14 @@ def register_or_login(form_data: OAuth2PasswordRequestForm = Depends(), db: Sess
     new_user = create_new_user(user=user_data, db=db)
     access_token = create_access_token(data={"sub": new_user.email})
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/token", response_model=Token)
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    access_token = register_or_login(form_data, db)
+    if not access_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+        )
+    return access_token

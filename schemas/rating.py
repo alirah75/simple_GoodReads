@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, conint
 
 
 class RatingCreate(BaseModel):
-    rate: int
+    rate: conint(ge=1, le=5)

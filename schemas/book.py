@@ -28,7 +28,8 @@ class BookDetail(BaseModel):
 
 class BookList(BaseModel):
     id: int
-    name: str
+    title: str
+    description: str
     bookmark_count: int
     is_bookmarked: Optional[bool] = None
 

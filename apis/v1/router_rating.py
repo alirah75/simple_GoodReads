@@ -19,7 +19,7 @@ def rate_book(book_id: int, rating: RatingCreate, db: Session = Depends(get_db),
     if existing_rating:
         existing_rating.rate = rating.rate
     else:
-        existing_rating = upsert_rating(user_id=current_user.id, book_id=book_id, rating=rating.rate, db=db)
+        existing_rating = upsert_rating(user_id=current_user.id, book_id=book_id, rate=rating.rate, db=db)
 
     delete_bookmark(book_id=book_id, user_id=current_user.id, db=db)
 
