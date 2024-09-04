@@ -1,20 +1,19 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Header
+from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from fastapi import HTTPException, status
 
-from core.security import get_user_id_from_token, get_current_user
+from core.security import get_current_user
 from database.repository.bookmark import get_bookmark_by_user_and_book
-from database.repository.comment import add_comment, upsert_comment
-from database.repository.rating import add_rating, upsert_rating
+from database.repository.comment import upsert_comment
+from database.repository.rating import upsert_rating
 from database.session import get_db
 from database.repository.book import retrieve_book, list_books
 from schemas.book import BookDetail, BookList
 from schemas.comment import CommentCreate
-from schemas.rate_and_comment import RateAndCommentRequest
 from schemas.rating import RatingCreate
 
 router = APIRouter()

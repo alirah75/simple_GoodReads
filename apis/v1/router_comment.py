@@ -1,5 +1,4 @@
-# router_comment.py
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from schemas.comment import CommentCreate
 
