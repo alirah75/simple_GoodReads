@@ -25,10 +25,15 @@ pip install -r requirements.txt
     Create a .env file in the root directory with the following variables:
 
 MYSQL_USER=your_mysql_username
+
 MYSQL_PASSWORD=your_mysql_password
+
 MYSQL_SERVER=localhost
+
 MYSQL_PORT=3306
+
 MYSQL_DB=your_database_name
+
 SECRET_KEY=your_secret_key
 
 ## Run migrations:
